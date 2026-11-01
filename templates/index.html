@@ -1,0 +1,200 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Critical Section Problem Simulator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<header class="main-header">
+    <div>
+        <h1>Critical Section Problem Simulator</h1>
+        <p>Operating System Mini Project</p>
+    </div>
+    <button class="btn btn-ghost" id="resetBtn">Reset Simulation</button>
+</header>
+
+<main class="container">
+
+    <section class="intro">
+        <h2>Welcome to the Critical Section Simulator</h2>
+        <p>
+            This simulator demonstrates how multiple processes access a shared
+            resource using different synchronization algorithms.
+        </p>
+    </section>
+
+    <section class="panel" id="simulator">
+        <h2>Simulation Settings</h2>
+
+        <div class="control-grid">
+            <label>
+                Select Algorithm
+                <select id="algorithm">
+                    {% for key, value in algorithms.items() %}
+                    <option value="{{ key }}">{{ value.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+
+            <label>
+                Number of Processes
+                <select id="processCount">
+                    <option value="2">2 Processes</option>
+                    <option value="3" selected>3 Processes</option>
+                    <option value="4">4 Processes</option>
+                    <option value="5">5 Processes</option>
+                    <option value="6">6 Processes</option>
+                </select>
+            </label>
+
+            <div class="control-actions">
+                <button class="btn btn-primary" id="stepBtn">Run One Step</button>
+                <button class="btn btn-secondary" id="runBtn">Run 8 Steps</button>
+            </div>
+        </div>
+
+        <p class="algorithm-note" id="algorithmNote">
+            Select an algorithm to begin the simulation.
+        </p>
+    </section>
+
+    <section class="metrics" id="analytics">
+
+        <div class="metric panel">
+            <h3>Critical Entries</h3>
+            <strong id="entries">0</strong>
+            <p>Total successful entries</p>
+        </div>
+
+        <div class="metric panel">
+            <h3>Completed Processes</h3>
+            <strong id="completed">0</strong>
+            <p>Completed critical sections</p>
+        </div>
+
+        <div class="metric panel">
+            <h3>Average Wait Time</h3>
+            <strong id="avgWait">0.00 <small>ticks</small></strong>
+            <p>Average waiting time</p>
+        </div>
+
+        <div class="metric panel">
+            <h3>Throughput</h3>
+            <strong id="throughput">0.000</strong>
+            <p>Completions per tick</p>
+        </div>
+
+    </section>
+
+    <section class="workspace-grid">
+
+        <div class="panel process-panel">
+            <h2>Process Status</h2>
+
+            <div class="legend">
+                <span>Green: Critical</span>
+                <span>Orange: Waiting</span>
+                <span>Grey: Ready</span>
+            </div>
+
+            <div class="process-list" id="processList"></div>
+
+            <div class="state-footer">
+                <span>Simulation Tick: <b id="tick">0</b></span>
+                <span>Lock: <b id="lockStatus">AVAILABLE</b></span>
+            </div>
+        </div>
+
+        <div class="panel resource-panel">
+            <h2>Shared Resource</h2>
+
+            <div class="resource-box" id="resourceBox">
+                <div class="resource-symbol">Shared Memory</div>
+                <b id="ownerLabel">No active owner</b>
+                <span id="resourceSub">Resource is available</span>
+                <div class="resource-number" id="resourceNumber">0</div>
+                <small>RESOURCE VALUE</small>
+            </div>
+
+            <div class="resource-details">
+                <div>
+                    <span>Mutex / Lock</span>
+                    <b id="mutexState">Unlocked</b>
+                </div>
+
+                <div>
+                    <span>Semaphore Value</span>
+                    <b id="semValue">1</b>
+                </div>
+
+                <div>
+                    <span>Waiting Queue</span>
+                    <b id="queueValue">Empty</b>
+                </div>
+
+                <div>
+                    <span>Mutual Exclusion</span>
+                    <b class="safe" id="safetyState">No violation detected</b>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="panel events-panel">
+        <h2>Simulation Event Log</h2>
+        <div class="events" id="eventLog"></div>
+    </section>
+
+    <section class="panel concepts" id="concepts">
+        <h2>Understanding Critical Section</h2>
+
+        <div class="concept-grid">
+
+            <article>
+                <h3>1. Entry Section</h3>
+                <p>
+                    A process requests permission to enter the critical section.
+                </p>
+            </article>
+
+            <article>
+                <h3>2. Critical Section</h3>
+                <p>
+                    The process accesses or modifies the shared resource.
+                </p>
+            </article>
+
+            <article>
+                <h3>3. Exit Section</h3>
+                <p>
+                    The process releases the lock so another process can enter.
+                </p>
+            </article>
+
+            <article>
+                <h3>4. Remainder Section</h3>
+                <p>
+                    The process performs its remaining operations.
+                </p>
+            </article>
+
+        </div>
+    </section>
+
+    <footer>
+        Critical Section Problem Simulator
+        <p>Operating Systems Mini Project | Flask + Python</p>
+    </footer>
+
+</main>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+
+</body>
+</html>
